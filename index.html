@@ -1,0 +1,802 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#173b63">
+<title>Indigenous Peoples Quiz | Urfolk i verden</title>
+<style>
+:root{
+  --navy:#173b63;
+  --blue:#2878b5;
+  --red:#d94245;
+  --white:#fff;
+  --bg:#f1f5fa;
+  --text:#243247;
+  --green:#218653;
+  --gold:#f1bd49;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+header{
+  background:linear-gradient(135deg,#173b63,#2878b5);
+  color:white;padding:24px 18px 28px;text-align:center;
+  border-bottom:5px solid var(--red);
+}
+.flag{font-size:27px}
+header h1{font-size:25px;margin:9px 0 5px}
+header p{margin:5px 0;line-height:1.5}
+.container{max-width:760px;margin:18px auto;padding:0 13px 35px}
+.card{
+  background:white;border-radius:18px;padding:20px;
+  box-shadow:0 4px 18px #173b6310;margin-bottom:15px;
+}
+h2{font-size:20px;margin:0 0 12px;color:var(--navy)}
+h3{margin:8px 0;color:var(--navy)}
+.small{font-size:13px;color:#64748b}
+button,select{
+  font:inherit;border-radius:11px;padding:12px 14px;
+}
+button{cursor:pointer;border:0;font-weight:650}
+button:focus-visible{outline:3px solid var(--gold)}
+.primary{background:var(--navy);color:white}
+.secondary{background:#e6eef8;color:var(--navy)}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mode{background:#eaf1fa;color:var(--navy);text-align:left;min-height:90px}
+.mode.active{background:var(--navy);color:white}
+.mode span{display:block;font-size:13px;margin-top:6px;font-weight:400}
+.settings{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.settings label{font-size:14px;flex:1;min-width:125px}
+select{width:100%;margin-top:5px;background:white;border:1px solid #ccd7e5}
+.progress-row{display:flex;justify-content:space-between;gap:10px;font-size:13px}
+.track{height:8px;background:#e5eaf1;border-radius:9px;overflow:hidden;margin:10px 0 17px}
+.bar{height:100%;width:0;background:var(--blue);transition:width .2s}
+.question{font-size:21px;line-height:1.4;font-weight:750;margin:12px 0}
+.translation{font-size:17px;color:#55708b;margin:8px 0 18px;line-height:1.5}
+.options{display:grid;gap:9px}
+.option{
+  background:#f4f7fb;border:2px solid #e0e7f0;
+  color:var(--text);text-align:left;width:100%;line-height:1.4;
+}
+.option:hover{border-color:var(--blue)}
+.option.correct{background:#e2f5e9;border-color:var(--green)}
+.option.wrong{background:#fff0f0;border-color:var(--red)}
+.option:disabled{cursor:default}
+.feedback{margin-top:15px;padding:13px;border-radius:12px;line-height:1.5}
+.good{background:#e6f6ec;color:#145c37}
+.bad{background:#fff0f0;color:#8d2929}
+.nav{display:flex;gap:10px;margin-top:16px}
+.nav button{flex:1}
+.hidden{display:none!important}
+.pill{display:inline-block;background:#e6eef8;color:var(--navy);
+padding:5px 9px;border-radius:20px;font-size:12px;font-weight:700}
+.score{text-align:center;padding:12px}
+.big-score{font-size:44px;color:var(--navy);font-weight:800}
+.word{padding:12px 0;border-bottom:1px solid #e5eaf1;line-height:1.5}
+.word:last-child{border-bottom:0}
+.word strong{color:var(--navy)}
+.footer{text-align:center;color:#718096;font-size:12px;padding:10px}
+@media(max-width:420px){
+ header h1{font-size:22px}
+ .card{padding:16px}
+ .question{font-size:19px}
+ .mode-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="flag">🌍 🇳🇴 🇬🇧</div>
+  <h1>Indigenous Peoples Quiz</h1>
+  <p>Urfolk i verden</p>
+  <p style="font-size:14px">Learn English • Lær norsk • Explore the world</p>
+</header>
+
+<main class="container">
+
+<section class="card" id="home">
+  <h2>🎮 Choose your game / Velg spill</h2>
+  <p>Practise your school assignment in English and Norwegian.</p>
+  <p class="small">Øv på skoleoppgaven din på engelsk og norsk.</p>
+
+  <div class="mode-grid">
+    <button class="mode active" data-mode="quiz">
+      🎯 Classic Quiz
+      <span>Flervalgsquiz</span>
+    </button>
+    <button class="mode" data-mode="truefalse">
+      ✅ True or False
+      <span>Sant eller usant</span>
+    </button>
+    <button class="mode" data-mode="vocab">
+      📚 Vocabulary
+      <span>Ord og uttrykk</span>
+    </button>
+    <button class="mode" data-mode="presentation">
+      🎤 Presentation Trainer
+      <span>Presentasjonstrening</span>
+    </button>
+  </div>
+
+  <div class="settings">
+    <label>
+      Number of questions / Antall spørsmål
+      <select id="count">
+        <option value="10">10 questions</option>
+        <option value="15">15 questions</option>
+        <option value="20" selected>20 questions</option>
+        <option value="all">All questions</option>
+      </select>
+    </label>
+    <label>
+      Language / Språk
+      <select id="language">
+        <option value="both">English + Norwegian</option>
+        <option value="en">English only</option>
+        <option value="no">Bare norsk</option>
+      </select>
+    </label>
+  </div>
+
+  <button class="primary" id="start" style="width:100%;margin-top:16px">
+    Start game / Start spillet 🚀
+  </button>
+</section>
+
+<section class="card hidden" id="game">
+  <div class="progress-row">
+    <span id="round">Question 1 / 20</span>
+    <span id="points">⭐ Score: 0</span>
+  </div>
+  <div class="track"><div class="bar" id="bar"></div></div>
+  <div><span class="pill" id="category">HISTORY</span></div>
+  <div class="question" id="question"></div>
+  <div class="translation" id="translation"></div>
+  <div class="options" id="options"></div>
+  <div class="feedback hidden" id="feedback" aria-live="polite"></div>
+  <div class="nav">
+    <button class="secondary" id="exit">← Menu</button>
+    <button class="primary" id="next" disabled>Next / Neste →</button>
+  </div>
+</section>
+
+<section class="card hidden" id="result">
+  <div class="score">
+    <div style="font-size:44px" id="trophy">🏆</div>
+    <h2 id="resultTitle">Well done!</h2>
+    <div class="big-score" id="finalScore">0/20</div>
+    <p id="resultMessage"></p>
+    <p id="percentage"></p>
+  </div>
+  <div class="nav">
+    <button class="secondary" id="menu">Menu / Meny</button>
+    <button class="primary" id="again">Play again / Spill igjen</button>
+  </div>
+</section>
+
+<section class="card" id="study">
+  <h2>📖 Assignment guide / Oppgaveguide</h2>
+  <p>Use these six research themes when preparing your group presentation.</p>
+  <p class="small">Bruk disse seks temaene når du forbereder gruppepresentasjonen.</p>
+  <div class="word"><strong>1. Who are they? / Hvem er de?</strong><br>People, location and population. / Folk, bosted og folketall.</div>
+  <div class="word"><strong>2. History / Historie</strong><br>Traditional territory and important historical events. / Tradisjonelt territorium og viktige historiske hendelser.</div>
+  <div class="word"><strong>3. Culture / Kultur</strong><br>Traditions, music, art, food and storytelling. / Tradisjoner, musikk, kunst, mat og historiefortelling.</div>
+  <div class="word"><strong>4. Language / Språk</strong><br>Languages, endangered languages and preservation. / Språk, truede språk og bevaring.</div>
+  <div class="word"><strong>5. Challenges and rights / Utfordringer og rettigheter</strong><br>Discrimination, land rights and cultural protection. / Diskriminering, landrettigheter og kulturvern.</div>
+  <div class="word"><strong>6. What can we learn? / Hva kan vi lære?</strong><br>Why culture and rights matter. / Hvorfor kultur og rettigheter er viktige.</div>
+  <div class="word"><strong>Presentation / Presentasjon</strong><br>About 5 minutes per group, 2–3 relevant visuals and at least 3 reliable sources. Use your own words.<br><span class="small">Omtrent 5 minutter per gruppe, 2–3 relevante bilder og minst 3 pålitelige kilder. Bruk egne ord.</span></div>
+</section>
+
+<section class="card">
+  <h2>🗣️ Useful English / Nyttig engelsk</h2>
+  <div class="word"><strong>Indigenous peoples</strong> — Urfolk</div>
+  <div class="word"><strong>Ancestral lands</strong> — Forfedrenes land</div>
+  <div class="word"><strong>Cultural identity</strong> — Kulturell identitet</div>
+  <div class="word"><strong>Traditional territory</strong> — Tradisjonelt territorium</div>
+  <div class="word"><strong>Colonisation</strong> — Kolonisering</div>
+  <div class="word"><strong>Forced assimilation</strong> — Tvungen assimilering</div>
+  <div class="word"><strong>Discrimination</strong> — Diskriminering</div>
+  <div class="word"><strong>Endangered language</strong> — Utrydningstruet språk</div>
+  <div class="word"><strong>Preserve a culture</strong> — Bevare en kultur</div>
+  <div class="word"><strong>Land rights</strong> — Landrettigheter</div>
+  <div class="word"><strong>Reliable sources</strong> — Pålitelige kilder</div>
+  <div class="word"><strong>In their own words</strong> — Med egne ord</div>
+</section>
+
+<div class="footer">Made for learning • Laget for læring ❤️</div>
+</main>
+
+<script>
+const questions = [
+{
+c:"RESEARCH",q:"What is the first question in the research assignment?",
+n:"Hva er det første spørsmålet i forskningsoppgaven?",
+a:["Who are they?","What is their favourite film?","What sports do they play?","What is their school called?"],
+correct:0,
+e:"You begin by identifying the Indigenous people, where they live and their approximate population.",
+no:"Du begynner med å finne ut hvem urfolket er, hvor de bor, og omtrent hvor mange de er."
+},
+{
+c:"HISTORY",q:"What does 'ancestral land' mean?",
+n:"Hva betyr «ancestral land»?",
+a:["Land connected to a people's ancestors","A newly built shopping centre","Land owned by a school","A holiday destination"],
+correct:0,
+e:"Ancestral lands are lands connected to a people's ancestors, history and cultural relationships.",
+no:"Forfedrenes land er områder som er knyttet til folkets forfedre, historie og kulturelle tilhørighet."
+},
+{
+c:"CULTURE",q:"Which can be part of an Indigenous culture?",
+n:"Hva kan være en del av en urfolkskultur?",
+a:["Language, art, music and storytelling","Only modern technology","Only one type of food","Exactly the same customs everywhere"],
+correct:0,
+e:"Culture can include language, traditions, art, music, food and storytelling. Practices vary between communities.",
+no:"Kultur kan omfatte språk, tradisjoner, kunst, musikk, mat og historiefortelling. Tradisjonene varierer mellom samfunn."
+},
+{
+c:"LANGUAGE",q:"What is an endangered language?",
+n:"Hva er et truet språk?",
+a:["A language at risk of no longer being spoken","A language everyone speaks","A language with no written words","A language used only in books"],
+correct:0,
+e:"An endangered language is at risk of disappearing when fewer people learn and speak it.",
+no:"Et truet språk står i fare for å forsvinne når færre mennesker lærer og bruker det."
+},
+{
+c:"HISTORY",q:"What does colonisation mean?",
+n:"Hva betyr «colonisation»?",
+a:["When a power takes control of another territory or people","When two friends exchange books","When a language is taught at school","When a community celebrates a festival"],
+correct:0,
+e:"Colonisation involves a power establishing control over another territory or people, often with lasting consequences.",
+no:"Kolonisering innebærer at en makt tar kontroll over et annet område eller folk, ofte med langvarige konsekvenser."
+},
+{
+c:"RIGHTS",q:"What is forced assimilation?",
+n:"Hva er tvungen assimilering?",
+a:["Pressuring people to abandon their culture and adopt another","Learning about different cultures voluntarily","Protecting a traditional language","Celebrating different traditions"],
+correct:0,
+e:"Forced assimilation pressures people to give up aspects of their identity, language or culture.",
+no:"Tvungen assimilering innebærer press om å gi opp deler av sin identitet, sitt språk eller sin kultur."
+},
+{
+c:"RESEARCH",q:"Which is a reliable source for your assignment?",
+n:"Hvilken kilde er pålitelig for oppgaven din?",
+a:["An official Indigenous organisation","An anonymous comment with no evidence","A random social media rumour","An advertisement with no references"],
+correct:0,
+e:"Official Indigenous organisations, universities, museums and the United Nations can be useful sources. Check each source carefully.",
+no:"Offisielle urfolksorganisasjoner, universiteter, museer og FN kan være nyttige kilder. Vurder alltid kilden kritisk."
+},
+{
+c:"PRESENTATION",q:"How long should each group's presentation be?",
+n:"Hvor lang skal presentasjonen til hver gruppe være?",
+a:["About 5 minutes","About 45 minutes","About 30 seconds","About 2 hours"],
+correct:0,
+e:"The assignment asks each group to present for approximately five minutes.",
+no:"Oppgaven sier at hver gruppe skal presentere i omtrent fem minutter."
+},
+{
+c:"PRESENTATION",q:"How many relevant images, maps or visual elements are required?",
+n:"Hvor mange relevante bilder, kart eller visuelle elementer kreves?",
+a:["At least 2–3","Exactly 10","None","At least 20"],
+correct:0,
+e:"Include at least two to three relevant images, maps or other visual elements.",
+no:"Ta med minst to til tre relevante bilder, kart eller andre visuelle elementer."
+},
+{
+c:"RESEARCH",q:"How many sources must be listed on the final slide?",
+n:"Hvor mange kilder må stå på den siste lysbildesiden?",
+a:["At least three","Exactly one","None","At least twenty"],
+correct:0,
+e:"Your final slide must include a list of at least three sources.",
+no:"Den siste lysbildesiden må inneholde minst tre kilder."
+},
+{
+c:"PRESENTATION",q:"What should you do instead of simply reading your slides?",
+n:"Hva bør du gjøre i stedet for å bare lese lysbildene?",
+a:["Use keywords and explain ideas in your own words","Read every sentence without looking up","Copy entire websites onto slides","Avoid preparing"],
+correct:0,
+e:"Use keywords, explain ideas in your own words and make eye contact with your audience.",
+no:"Bruk nøkkelord, forklar ideene med egne ord og ha øyekontakt med publikum."
+},
+{
+c:"RIGHTS",q:"Why is protecting Indigenous languages important?",
+n:"Hvorfor er det viktig å beskytte urfolksspråk?",
+a:["Languages can carry knowledge, identity and cultural history","All languages must become identical","Languages are only useful for tourists","Languages never change"],
+correct:0,
+e:"Languages can carry knowledge, traditions, identity and connections between generations.",
+no:"Språk kan formidle kunnskap, tradisjoner, identitet og forbindelser mellom generasjoner."
+},
+{
+c:"CULTURE",q:"What is storytelling?",
+n:"Hva betyr «storytelling»?",
+a:["Telling stories to share experiences and knowledge","Making a list of numbers","Copying a map","Building a house"],
+correct:0,
+e:"Storytelling can pass on history, values, knowledge and traditions between generations.",
+no:"Historiefortelling kan videreføre historie, verdier, kunnskap og tradisjoner mellom generasjoner."
+},
+{
+c:"RIGHTS",q:"What does discrimination mean?",
+n:"Hva betyr diskriminering?",
+a:["Unfair treatment because of a person's identity or background","Treating everyone with respect","Learning a new language","Sharing cultural knowledge"],
+correct:0,
+e:"Discrimination means unfair treatment based on characteristics such as identity or background.",
+no:"Diskriminering betyr urettferdig behandling på grunn av egenskaper som identitet eller bakgrunn."
+},
+{
+c:"RESEARCH",q:"Why should you write notes in your own words?",
+n:"Hvorfor bør du skrive notater med egne ord?",
+a:["To show your understanding and avoid copying","To make the research less accurate","To hide your sources","To avoid learning the topic"],
+correct:0,
+e:"Paraphrasing helps show understanding. You must still acknowledge the sources of your information.",
+no:"Å formulere informasjon med egne ord viser forståelse. Du må fortsatt oppgi kildene dine."
+},
+{
+c:"CULTURE",q:"Which statement about Indigenous peoples is respectful and accurate?",
+n:"Hvilket utsagn om urfolk er respektfullt og riktig?",
+a:["Different communities have different experiences and traditions","All Indigenous peoples have identical lifestyles","Indigenous peoples only belong in the past","All communities speak the same language"],
+correct:0,
+e:"Indigenous peoples are diverse, living communities. Avoid assuming that everyone shares the same customs or lifestyle.",
+no:"Urfolk er mangfoldige samfunn som lever i dag. Ikke anta at alle har de samme tradisjonene eller levemåtene."
+},
+{
+c:"PRESENTATION",q:"What should your conclusion explain?",
+n:"Hva bør konklusjonen forklare?",
+a:["Why the people's culture and rights matter","Only the name of the group","Only the number of slides","Nothing about the research"],
+correct:0,
+e:"The conclusion should explain why protecting the people's culture and rights matters.",
+no:"Konklusjonen bør forklare hvorfor det er viktig å beskytte folkets kultur og rettigheter."
+},
+{
+c:"GROUP WORK",q:"How many students should be in each group?",
+n:"Hvor mange elever skal det være i hver gruppe?",
+a:["4–5 students","1 student only","10–12 students","20 students"],
+correct:0,
+e:"The assignment specifies groups of four to five students.",
+no:"Oppgaven sier at gruppene skal bestå av fire til fem elever."
+},
+{
+c:"GROUP WORK",q:"How much work time is allocated to the assignment?",
+n:"Hvor mye arbeidstid er satt av til oppgaven?",
+a:["45 minutes","5 minutes","2 hours","One whole week"],
+correct:0,
+e:"The allocated work time is 45 minutes.",
+no:"Det er satt av 45 minutter til arbeidet."
+},
+{
+c:"RESEARCH",q:"What should you investigate about an Indigenous language?",
+n:"Hva bør du undersøke om et urfolksspråk?",
+a:["Whether it is endangered and how people preserve it","Only how many letters it has","Whether it sounds like English","Whether everyone speaks it worldwide"],
+correct:0,
+e:"Find out which languages are spoken, whether they are endangered and what people are doing to preserve them.",
+no:"Finn ut hvilke språk som snakkes, om de er truet, og hva folk gjør for å bevare dem."
+},
+{
+c:"HISTORY",q:"What should you research about historical events?",
+n:"Hva bør du undersøke om historiske hendelser?",
+a:["Three events that shaped the people's lives","Only events from last week","Only famous football matches","Events unrelated to their history"],
+correct:0,
+e:"The task asks you to identify three historical events that have shaped the community's lives.",
+no:"Oppgaven ber deg finne tre historiske hendelser som har påvirket folkets liv."
+},
+{
+c:"RIGHTS",q:"What can land loss mean for an Indigenous community?",
+n:"Hva kan tap av land bety for et urfolkssamfunn?",
+a:["Loss of access to places connected to culture, livelihoods and identity","That every tradition disappears immediately","That all languages become stronger","That history no longer matters"],
+correct:0,
+e:"Land loss can affect livelihoods, cultural practices, community life and relationships with ancestral places.",
+no:"Tap av land kan påvirke livsgrunnlag, kulturutøvelse, fellesskap og tilknytningen til forfedrenes områder."
+},
+{
+c:"RESEARCH",q:"What is a good way to learn about a people's present-day life?",
+n:"Hva er en god måte å lære om urfolkets liv i dag?",
+a:["Use recent sources and Indigenous people's own perspectives","Only read old history books","Assume nothing has changed","Use stereotypes from films"],
+correct:0,
+e:"Combine historical information with recent sources and perspectives from the community itself.",
+no:"Kombiner historisk informasjon med nyere kilder og perspektiver fra selve urfolkssamfunnet."
+},
+{
+c:"CULTURE",q:"What can cultural symbols represent?",
+n:"Hva kan kulturelle symboler representere?",
+a:["Identity, history, beliefs or shared meaning","Only the weather","Only the population size","Nothing meaningful"],
+correct:0,
+e:"Symbols can have important meanings connected to identity, history, beliefs or community.",
+no:"Symboler kan ha viktig betydning knyttet til identitet, historie, tro eller fellesskap."
+},
+{
+c:"PRESENTATION",q:"Which is the best way to choose images for your slides?",
+n:"Hva er den beste måten å velge bilder til lysbildene på?",
+a:["Choose relevant visuals and credit sources when needed","Choose random pictures unrelated to the topic","Use images without checking what they show","Use as many pictures as possible without explanation"],
+correct:0,
+e:"Choose images and maps that help explain the topic, and credit their sources appropriately.",
+no:"Velg bilder og kart som forklarer temaet, og oppgi kildene på riktig måte."
+},
+{
+c:"RIGHTS",q:"What is one reason other societies can learn from Indigenous peoples?",
+n:"Hva er én grunn til at andre samfunn kan lære av urfolk?",
+a:["Their experiences can offer knowledge about history, culture and protecting rights","Every community has the same history","Their experiences are no longer relevant","Only their clothing is worth studying"],
+correct:0,
+e:"Their experiences can help people understand cultural diversity, history, rights and relationships with land.",
+no:"Erfaringene deres kan hjelpe oss å forstå kulturelt mangfold, historie, rettigheter og forholdet til land."
+},
+{
+c:"VOCABULARY",q:"What does 'preserve' mean?",
+n:"Hva betyr «preserve»?",
+a:["To protect and keep something alive or in existence","To forget completely","To destroy deliberately","To replace everything"],
+correct:0,
+e:"Preserve means to protect something and help it continue to exist.",
+no:"«Preserve» betyr å beskytte noe og bidra til at det fortsetter å eksistere."
+},
+{
+c:"VOCABULARY",q:"What does 'approximately' mean?",
+n:"Hva betyr «approximately»?",
+a:["About; not exactly","Never","Exactly the same","Much later"],
+correct:0,
+e:"Approximately means about or roughly. For example, approximately 100 people means around 100 people.",
+no:"«Approximately» betyr omtrent. For eksempel betyr «approximately 100 people» rundt 100 personer."
+},
+{
+c:"VOCABULARY",q:"What does 'in their own words' mean?",
+n:"Hva betyr «in their own words»?",
+a:["Using your own way of expressing an idea","Copying a paragraph exactly","Speaking only another language","Leaving out all explanations"],
+correct:0,
+e:"It means explaining information using your own wording rather than copying someone else's text.",
+no:"Det betyr å forklare informasjon med egne formuleringer i stedet for å kopiere andres tekst."
+},
+{
+c:"GROUP WORK",q:"What should you do if group members find different information?",
+n:"Hva bør dere gjøre hvis gruppemedlemmene finner ulik informasjon?",
+a:["Compare reliable sources and check the evidence","Choose the first answer without checking","Ignore every source","Invent a compromise"],
+correct:0,
+e:"Compare the sources, check dates and evidence, and explain any uncertainty honestly.",
+no:"Sammenlign kildene, kontroller datoer og dokumentasjon, og forklar usikkerhet på en ærlig måte."
+}
+];
+
+const vocabulary = [
+["Indigenous peoples","Urfolk"],
+["Ancestral lands","Forfedrenes land"],
+["Cultural identity","Kulturell identitet"],
+["Traditions","Tradisjoner"],
+["Customs","Skikker"],
+["Storytelling","Historiefortelling"],
+["Endangered language","Truet språk"],
+["Preserve","Bevare"],
+["Colonisation","Kolonisering"],
+["Forced assimilation","Tvungen assimilering"],
+["Discrimination","Diskriminering"],
+["Land rights","Landrettigheter"],
+["Reliable sources","Pålitelige kilder"],
+["Population","Folketall / befolkning"],
+["Historical events","Historiske hendelser"],
+["Cultural symbols","Kulturelle symboler"],
+["Challenges","Utfordringer"],
+["Presentation","Presentasjon"],
+["Conclusion","Konklusjon"],
+["Evidence","Dokumentasjon / bevis"],
+["Research","Forskning / undersøkelser"],
+["In their own words","Med egne ord"],
+["Approximately","Omtrent"],
+["Community","Samfunn / fellesskap"],
+["Audience","Publikum"],
+["Eye contact","Øyekontakt"]
+];
+
+const presentation = [
+{
+c:"INTRODUCTION",
+q:"Which sentence is a good way to introduce your topic?",
+n:"Hvilken setning er en god måte å introdusere temaet på?",
+a:[
+"Today, we are going to present the [people] and their history.",
+"I don't know what we are talking about.",
+"Everyone already knows everything about this topic.",
+"We have no information to share."
+],correct:0,
+e:"Introduce the people and explain what your presentation will cover.",
+no:"Presenter urfolket og forklar hva presentasjonen skal handle om."
+},
+{
+c:"LOCATION",
+q:"Which sentence helps explain where a people live?",
+n:"Hvilken setning forklarer hvor et folk bor?",
+a:[
+"They traditionally live in [region], and their communities are diverse.",
+"They live exactly the same way everywhere.",
+"I will not explain where they live.",
+"They only lived in the past."
+],correct:0,
+e:"Give a clear location, and explain that communities and lifestyles can differ.",
+no:"Oppgi hvor folket bor, og forklar at samfunn og levemåter kan variere."
+},
+{
+c:"HISTORY",
+q:"How can you introduce an important historical event?",
+n:"Hvordan kan du introdusere en viktig historisk hendelse?",
+a:[
+"One important event that shaped their history was...",
+"History is not important.",
+"I copied this from a website.",
+"Nothing ever happened."
+],correct:0,
+e:"Introduce the event and explain how it affected the community.",
+no:"Presenter hendelsen og forklar hvordan den påvirket samfunnet."
+},
+{
+c:"CULTURE",
+q:"How can you describe a cultural tradition respectfully?",
+n:"Hvordan kan du beskrive en kulturell tradisjon på en respektfull måte?",
+a:[
+"One tradition practised by some members of this community is...",
+"Everyone in the world follows this tradition.",
+"Their culture is strange.",
+"All members must believe the same things."
+],correct:0,
+e:"Be specific and avoid assuming that every person follows the same tradition.",
+no:"Vær konkret, og unngå å anta at alle følger den samme tradisjonen."
+},
+{
+c:"LANGUAGE",
+q:"Which sentence is useful when discussing language preservation?",
+n:"Hvilken setning er nyttig når du snakker om språkbevaring?",
+a:[
+"Community members are working to keep their language alive by...",
+"Languages are not part of culture.",
+"Nobody needs to speak their language.",
+"Every language has already disappeared."
+],correct:0,
+e:"Explain actual efforts to preserve the language, using reliable sources.",
+no:"Forklar konkrete tiltak for å bevare språket, og bruk pålitelige kilder."
+},
+{
+c:"CHALLENGES",
+q:"How should you discuss discrimination?",
+n:"Hvordan bør du snakke om diskriminering?",
+a:[
+"Explain what happened, use evidence and discuss its effects respectfully.",
+"Make jokes about the people affected.",
+"Repeat stereotypes without checking them.",
+"Ignore the historical context."
+],correct:0,
+e:"Be factual, respectful and careful when discussing painful historical experiences.",
+no:"Vær saklig, respektfull og forsiktig når du snakker om smertefulle historiske erfaringer."
+},
+{
+c:"SOURCES",
+q:"How should you use information from a website?",
+n:"Hvordan bør du bruke informasjon fra et nettsted?",
+a:[
+"Check the source, take notes in your own words and cite it.",
+"Copy every paragraph without credit.",
+"Invent the author and date.",
+"Use information without checking its accuracy."
+],correct:0,
+e:"Check reliability, paraphrase accurately and include the source in your references.",
+no:"Kontroller påliteligheten, bruk egne formuleringer og ta med kilden i kildelisten."
+},
+{
+c:"CONCLUSION",
+q:"Which is a strong way to end the presentation?",
+n:"Hva er en god måte å avslutte presentasjonen på?",
+a:[
+"Their culture and rights matter because every community deserves respect and protection.",
+"That is all. Nothing matters.",
+"We did not learn anything.",
+"We do not need to protect any culture."
+],correct:0,
+e:"Summarise why the community's culture, rights and future matter.",
+no:"Oppsummer hvorfor samfunnets kultur, rettigheter og framtid er viktige."
+},
+{
+c:"DELIVERY",
+q:"What helps you speak confidently to an audience?",
+n:"Hva hjelper deg med å snakke trygt foran et publikum?",
+a:[
+"Practise, use keywords and make eye contact.",
+"Read every word from the screen without practising.",
+"Speak as quickly as possible.",
+"Hide all your slides."
+],correct:0,
+e:"Practise your part, use notes and speak clearly at a comfortable pace.",
+no:"Øv på din del, bruk notater og snakk tydelig i et behagelig tempo."
+},
+{
+c:"VISUALS",
+q:"What makes a good presentation slide?",
+n:"Hva kjennetegner et godt lysbilde?",
+a:[
+"Clear keywords and relevant images or maps.",
+"Several long copied paragraphs.",
+"Pictures with no connection to the topic.",
+"Text that is too small to read."
+],correct:0,
+e:"Keep slides clear and readable. Explain the details aloud instead of filling the screen with text.",
+no:"Hold lysbildene tydelige og lesbare. Forklar detaljene muntlig i stedet for å fylle skjermen med tekst."
+}
+];
+
+let mode="quiz", pool=[], index=0, score=0, answered=false, lastCount=20;
+const $=id=>document.getElementById(id);
+const shuffle=arr=>arr.slice().sort(()=>Math.random()-.5);
+
+document.querySelectorAll(".mode").forEach(btn=>{
+ btn.addEventListener("click",()=>{
+  mode=btn.dataset.mode;
+  document.querySelectorAll(".mode").forEach(b=>b.classList.toggle("active",b===btn));
+ });
+});
+
+function show(id){
+ ["home","game","result"].forEach(x=>$(x).classList.toggle("hidden",x!==id));
+}
+
+function startGame(){
+ score=0;index=0;answered=false;
+ const lang=$("language").value;
+ if(mode==="vocab"){
+  pool=shuffle(vocabulary).map(v=>({
+   c:"VOCABULARY",q:"What does '"+v[0]+"' mean?",n:"Hva betyr «"+v[0]+"»?",
+   a:shuffle([v[1],...shuffle(vocabulary.filter(x=>x!==v)).slice(0,3).map(x=>x[1])]),
+   correct:0,e:"English: "+v[0]+". Norwegian: "+v[1]+".",
+   no:"Engelsk: "+v[0]+". Norsk: "+v[1]+"."
+  }));
+  pool.forEach(q=>q.correct=q.a.indexOf(vocabulary.find(v=>q.q.includes(v[0]))?.[1]));
+ }else if(mode==="presentation"){
+  pool=shuffle(presentation).map(q=>({...q,a:shuffle(q.a)}));
+  pool.forEach(q=>q.correct=q.a.findIndex(a=>a===q.a.find(x=>x===q.a[0]) ));
+  // Restore correct answer from the original item after shuffling.
+  pool.forEach(q=>{
+   const original=presentation.find(p=>p.q===q.q);
+   q.correct=q.a.indexOf(original.a[original.correct]);
+  });
+ }else{
+  pool=shuffle(questions).map(q=>({...q,a:shuffle(q.a)}));
+  pool.forEach(q=>{
+   const original=questions.find(p=>p.q===q.q);
+   q.correct=q.a.indexOf(original.a[original.correct]);
+  });
+  if(mode==="truefalse"){
+   pool=pool.map(q=>{
+    const isTrue=Math.random()>.5;
+    return {...q,a:["True / Sant","False / Usant"],
+     correct:isTrue?0:1,
+     e:isTrue?q.e:"The statement is false. / Utsagnet er usant.",
+     no:isTrue?q.no:"Utsagnet er usant. / The statement is false.",
+     originalCorrect:q.correct,
+     statementTrue:isTrue
+    };
+   });
+  }
+ }
+ let amount=$("count").value;
+ if(amount!=="all")pool=pool.slice(0,Number(amount));
+ // For true/false, generate accurate statements from the question bank.
+ if(mode==="truefalse"){
+  pool.forEach(q=>{
+   q.q=q.statementTrue?questions.find(x=>x.q===q.q).q:
+    "Statement: "+falseStatement(q);
+  });
+ }
+ lastCount=pool.length;
+ show("game");render();
+}
+
+function falseStatement(q){
+ const replacements=[
+  ["About 5 minutes","About 45 minutes"],
+  ["At least three","Exactly one"],
+  ["4–5 students","20 students"],
+  ["45 minutes","5 minutes"],
+  ["At least 2–3","None"]
+ ];
+ let text=q.e+"";
+ return "This statement is not correct. Check the research assignment.";
+}
+
+function render(){
+ answered=false;
+ const q=pool[index];
+ $("round").textContent=`Question ${index+1} / ${pool.length}`;
+ $("points").textContent=`⭐ Score: ${score}`;
+ $("bar").style.width=((index/pool.length)*100)+"%";
+ $("category").textContent=q.c;
+ const lang=$("language").value;
+ $("question").textContent=(lang==="no"?q.n:q.q);
+ $("translation").textContent=lang==="both"?(q.n):"";
+ $("options").innerHTML="";
+ $("feedback").className="feedback hidden";
+ $("next").disabled=true;
+ $("next").textContent=index===pool.length-1?"See results / Resultat →":"Next / Neste →";
+
+ let options=q.a;
+ if(mode==="truefalse"){
+  // Use a factual true/false statement rather than an ambiguous question.
+  const base=questions.find(x=>x.q===q.q)||questions.find(x=>x.q===q.originalQuestion);
+  const item=questions.find(x=>x.q===q.q);
+  const originalQuestion=q.q.replace("Statement: ","");
+  const source=questions.find(x=>x.e===q.e)||questions[index%questions.length];
+  const trueStatements=[
+   ["Each group presents for approximately five minutes.","Hver gruppe presenterer i omtrent fem minutter.",true],
+   ["The assignment requires at least three sources.","Oppgaven krever minst tre kilder.",true],
+   ["Each group should have 4–5 students.","Hver gruppe skal ha 4–5 elever.",true],
+   ["The presentation should include 2–3 relevant visuals.","Presentasjonen skal inneholde 2–3 relevante visuelle elementer.",true],
+   ["Students should use their own words.","Elevene bør bruke egne ord.",true],
+   ["All Indigenous peoples share exactly the same traditions.","Alle urfolk har nøyaktig de samme tradisjonene.",false],
+   ["Students should copy entire paragraphs from websites.","Elevene bør kopiere hele avsnitt fra nettsteder.",false],
+   ["Indigenous peoples only belong to the past.","Urfolk hører bare til fortiden.",false],
+   ["The presentation should have no conclusion.","Presentasjonen skal ikke ha noen konklusjon.",false],
+   ["Reliable sources are unnecessary.","Pålitelige kilder er unødvendige.",false],
+   ["The group work time is 45 minutes.","Arbeidstiden for gruppeoppgaven er 45 minutter.",true],
+   ["The group must include at least 20 students.","Gruppen må ha minst 20 elever.",false]
+  ];
+  const statement=trueStatements[index%trueStatements.length];
+  q.q=lang==="no"?statement[1]:statement[0];
+  $("question").textContent=q.q;
+  $("translation").textContent=lang==="both"?(lang==="no"?"":statement[1]):"";
+  q.correct=statement[2]?0:1;
+  options=["True / Sant","False / Usant"];
+ }
+ options.forEach((answer,i)=>{
+  const btn=document.createElement("button");
+  btn.className="option";
+  btn.textContent=answer;
+  btn.addEventListener("click",()=>choose(i,btn));
+  $("options").appendChild(btn);
+ });
+ $("bar").style.width=((index/pool.length)*100)+"%";
+}
+
+function choose(i,btn){
+ if(answered)return;
+ answered=true;
+ const q=pool[index];
+ const correct=i===q.correct;
+ if(correct)score++;
+ [...$("options").children].forEach((b,j)=>{
+  b.disabled=true;
+  if(j===q.correct)b.classList.add("correct");
+  else if(j===i)b.classList.add("wrong");
+ });
+ const fb=$("feedback");
+ fb.className="feedback "+(correct?"good":"bad");
+ const lang=$("language").value;
+ let title=correct?"✅ Correct!":"❌ Not quite!";
+ let explanation=lang==="no"?q.no:(lang==="en"?q.e:q.e+"\n\nNorsk: "+q.no);
+ fb.innerHTML="<strong>"+title+"</strong><br>"+escapeHTML(explanation);
+ $("points").textContent=`⭐ Score: ${score}`;
+ $("next").disabled=false;
+ $("bar").style.width=(((index+1)/pool.length)*100)+"%";
+}
+
+function escapeHTML(s){
+ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function nextQuestion(){
+ if(!answered)return;
+ index++;
+ if(index>=pool.length){finish();return;}
+ render();
+}
+
+function finish(){
+ show("result");
+ const pct=Math.round(score/pool.length*100);
+ $("finalScore").textContent=score+"/"+pool.length;
+ $("percentage").textContent=pct+"% correct / riktige svar";
+ $("trophy").textContent=pct>=80?"🏆":pct>=50?"🌟":"💪";
+ $("resultTitle").textContent=pct>=80?"Excellent work! / Fantastisk!":pct>=50?"Good progress! / God framgang!":"Keep practising! / Fortsett å øve!";
+ $("resultMessage").textContent=pct>=80?
+  "You are building a strong understanding of the assignment.":"Review the assignment guide and vocabulary, then try again.";
+}
+
+$("start").addEventListener("click",startGame);
+$("next").addEventListener("click",nextQuestion);
+$("exit").addEventListener("click",()=>show("home"));
+$("menu").addEventListener("click",()=>show("home"));
+$("again").addEventListener("click",startGame);
+</script>
+</body>
+</html>
